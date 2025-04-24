@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+   
+}
+
+
+body{
+    background-image: linear-gradient(0deg, rgba(200, 201, 201, 0.982), rgba(4, 156, 27, 0.988));
+    background-position: center;
+    background-size: cover;
+    align-items: center;
+    justify-content: space-between;
+    padding:0; 
+    min-height: 100vh;
+    text-align: center;
+    margin:0;
+   
+}
+
+header,h1{
+    width:100%;
+    margin: 0;
+    padding: 15vh 0;
+    font-size: 50%;
+    line-height: 30px;  /*diminiu o espaçamento entre o nome cadastro*/
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    
+}
+
+
+
+.divisao-titulo {
+    margin: 0px;
+    /* margin-top: 48px; */
+    margin-right: 40px;
+    width: 100%;
+    text-align: center;
+    align-items: center;
+    margin-bottom: 20px;
+    justify-content: space-between;
+}
+
+.titulo-home{
+    color:#faf9f9eb;
+    font-size: 3.5vi;
+    margin:0;
+    
+}
+
+.container__imagem {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* margin-top: 100px; */
+    
+  
+   
+    
+
+}
+
+div,img{
+    border-radius: 25px;
+}
+
+.vetorPessoas{
+   height: auto;
+   max-width: 590px; 
+   margin-left: 20px; /* Espaço entre o texto e a imagem */
+   bottom: 8vh;
+}
+
+
+@media (max-width:768px) {
+    .container__imagem {
+        display: flex;
+        justify-content: flex-end;
+        
+}}
+ 
+
+

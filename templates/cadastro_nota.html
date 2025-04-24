@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastrar Nota</title>
+  <link rel="stylesheet" href="/static/css/cadastro_nota.css">
+  <link rel="stylesheet" href="/static/css/componentes/cabecalho.css">
+</head>
+<body>
+
+  <header class="cabecalho">
+    <nav class="cabecalho__menu">
+        <button class="menu-toggle" aria-label="Toggle menu">
+            ☰
+        </button>
+        <div class="menu-links">
+          <a class="cabecalho__menu__link" href="login">Login</a>
+          <a class="cabecalho__menu__link" href="cadastro_usuario">Cadastrar Usuario</a>
+          <a class="cabecalho__menu__link" href="cadastro_nota">Cadastrar Nota</a>
+          <a class="cabecalho__menu__link" href="consulta_balanco">Consultar Balanço</a>
+          <a class="cabecalho__menu__link" href="/#" onClick="solicitarRelatorio(event)">Solicitar Relatório </a>
+
+        </div>
+    </nav>
+  
+    <div class="container">
+      <div class="form-image">
+        <img src="/static/img/images financeiro.jpg 9.jpg" alt="">
+      </div>
+
+      <div class="form-container">
+        <form action="criar_nota" method="post">
+          <div class="input-box">
+          
+          <h2 class="titulo-Tomador">Cliente Tomador de Serviço</h2>
+      
+          <div class="input-box">
+            <label for="nome_tomador_de_servicos">Nome Cliente</label>
+            <input name="nome_tomador_de_servicos" id="nome_tomador_de_servicos" type="text" placeholder="" required> 
+          </div>
+
+          <div class="input-box">
+            <label for="numero_tomador_cpf_cnpj">CPF/CNPJ</label>
+            <input name="numero_tomador_cpf_cnpj" id="numero_tomador_cpf_cnpj" type="number" placeholder="" required> 
+          </div>
+
+          <h2 class="Valor-Total">Valor Total dos Serviços</h2>
+          
+          <div class="input-box">
+            <label for="valor_entrada">Valor de Entrada</label>
+            <input name="valor_entrada" id="valor_entrada" type="number" placeholder="" required> 
+          </div>
+
+          <div class="input-box">
+            <label for="valor_saida">Valor de Saida</label>
+            <input name="valor_saida" id="valor_saida" type="number" placeholder="" required> 
+          </div>
+
+          
+          <div class="input-box">
+            <label for="data_emissao">Data de Emissão</label>
+            <input name="data_emissao" id="data_emissao" type="date" placeholder="" required> 
+          </div>
+
+          <div class="continue-button">
+            <input type="submit" value="Cadastrar">
+          </div>
+          
+        </form>
+      </div>
+    </div>
+    </header>
+
+  <script src="./static/script/funcoes.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const menuToggle = document.querySelector('.menu-toggle');
+        const menuLinks = document.querySelector('.menu-links');
+
+        menuToggle.addEventListener('click', function() {
+            menuLinks.classList.toggle('active');
+        });
+    });
+
+</script>
+</body>
+</html>
+  
