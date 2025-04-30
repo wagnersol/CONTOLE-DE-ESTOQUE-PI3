@@ -39,6 +39,22 @@ CREATE TABLE IF NOT EXISTS usuario (
 # Executar o comando SQL
 cursor.execute(comando_sql)
 
+
+### Tabela produto
+cursor = conexao.cursor()
+
+# criar a tabela de produto
+comando_sql = """
+CREATE TABLE IF NOT EXISTS produto (
+    id INTEGER PRIMARY KEY,
+    nome TEXT,
+    quantidade  INTEGER,
+    
+)
+"""
+# Executar o comando SQL
+cursor.execute(comando_sql)
+
 # fechar a conexão
 conexao.commit()
 conexao.close()

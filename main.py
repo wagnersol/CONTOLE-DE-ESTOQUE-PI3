@@ -24,6 +24,11 @@ def cadastro_usuario():
     return render_template("cadastro_usuario.html")
 
 
+@app.route("/cadastro_produto")
+def cadastro_produto():
+    return render_template("cadastro_produto.html")
+
+
 @app.route("/cadastro_nota")
 def cadastrar_nota():
     if not session.get('nome'):
@@ -108,6 +113,7 @@ def criar_nota():
             conn.commit()
     return render_template("nota_cadastrada.html")
 
+
 @app.route('/submit_usuario', methods=['POST'])
 def submit_usuario():
     nome = request.form['nome']
@@ -119,6 +125,19 @@ def submit_usuario():
                         (nome, email, senha))
             conn.commit()
     return redirect(url_for('login'))
+
+@app.route('/submit_produto', methods=['POST'])
+def submit_produto():
+    print(request.form)
+    nome = request.form['nome']
+    quantidade_existente = request.form['quantidade_existente']
+    with psycopg.connect(URL_CONNEXAO) as conn:
+        with conn.cursor() as cur:
+            cur.execute("INSERT INTO produto (nome, quantidade) VALUES (%s, %s)", 
+                        (nome, quantidade_existente))
+            conn.commit()
+    return redirect(url_for('home.html'))
+
 
 @app.route("/submit_login", methods=['POST'])
 def submit_login():
