@@ -48,7 +48,7 @@ comando_sql = """
 CREATE TABLE IF NOT EXISTS produto (
     id INTEGER PRIMARY KEY,
     nome TEXT,
-    quantidade  INTEGER,
+    quantidade  INTEGER
     
 )
 """

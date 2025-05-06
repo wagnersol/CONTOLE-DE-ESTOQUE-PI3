@@ -10,6 +10,7 @@ URL_CONNEXAO = "postgres://neondb_owner:3Vzlg8qIRBoa@ep-green-bonus-a58b1qy5.us-
 app = Flask(__name__)
 CORS(app)
 
+
 # Adiciona o icone nas páginas
 @app.route('/favicon.ico')
 def favicon():
@@ -128,15 +129,17 @@ def submit_usuario():
 
 @app.route('/submit_produto', methods=['POST'])
 def submit_produto():
-    print(request.form)
     nome = request.form['nome']
     quantidade_existente = request.form['quantidade_existente']
     with psycopg.connect(URL_CONNEXAO) as conn:
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO produto (nome, quantidade) VALUES (%s, %s)", 
-                        (nome, quantidade_existente))
+            cur.execute("UPDATE produto SET quantidade = %s WHERE nome= %s", 
+                        (quantidade_existente, nome))
             conn.commit()
-    return redirect(url_for('home.html'))
+   # return redirect(url_for('home.html'))
+    return render_template("home.html")
+
+
 
 
 @app.route("/submit_login", methods=['POST'])
