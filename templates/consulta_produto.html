@@ -30,52 +30,52 @@
     <div class="conteudo-consulta">
         <div class="box">
             <div class="img-box">
-                 <img src="/static/img/images financeiro.jpg 2.jpg" alt="">
+                 <img src="/static/img/variedade-de-pessoas-multitasking-em-uma-cena-de-desenho-animado-3d_23-2151294523.avif" alt="100">
      
              </div>
+             
              <div class="form-box">
-                 <form action="/submit_consulta" method="post">
-                     <div class="input-group">
-                         <label for="nome">Nome/Descrição:</label>
-                         <input type="text" id="nome" name="nome" placeholder="" required>
-                     </div>
-     
-                     <!-- 
-                     <div class="input-group">
-                         <label for="data_Fabricação">Data/Fabricação:</label>
-                         <input type="data_Fabricação" id="data_Fabricação" name="data_Fabricação"placeholder="" required>
-                     </div>
-     
-                     <div class="input-group w50">
-                         <label for="data_vencimento">Data/Vencimento:</label>
-                         <input type="data_vencimento" id="data_vencimento" name="data_vencimento" placeholder="" required>
-                     </div>
-     
-                     <div class="input-group w50">
-                        <label for="fabricante">Empresa/Fabricante:</label>
-                        <input type="fabricante" id="fabricante" name="fabricante" placeholder="" required>
+                <form action="/submit_produto" method="post">
+                    <div class="input-group">
+                        <label for="nome">Nome/Descrição:</label>
+                        <input type="text" id="nome" name="nome" placeholder="" required>
                     </div>
-
-                    -->
-                     <div class="input-group w50">
-                         <label for="quantidade_existente">quantidade/existente:</label>
-                         <input type="quantidade_produto" id="quantidadeproduto" placeholder="" required>
-                     </div>
-     
-                     <div class="input-group">
-                     <input type="submit" value="Cadastrar">
+    <!--
+                    <div class="input-group">
+                        <label for="data_Fabricação">Data/Fabricação:</label>
+                        <input type="data_Fabricação" id="data_Fabricação" name="data_Fabricação"placeholder="" required>
+                    </div>
+    
+                    <div class="input-group w50">
+                        <label for="data_vencimento">Data/Vencimento:</label>
+                        <input type="data_vencimento" id="data_vencimento" name="data_vencimento" placeholder="" required>
+                    </div>
+    
+                    <div class="input-group w50">
+                       <label for="fabricante">Empresa/Fabricante:</label>
+                       <input type="fabricante" id="fabricante" name="fabricante" placeholder="" required>
                    </div>
-                     
-                   
-     
-                 </form>
-     
-             </div>
-     
-     
-         </div>
-    </div>
-  
+-->
+                    <div class="input-group w50">
+                        <label for="quantidade_existente">quantidade/existente:</label>
+                        <input name="quantidade_existente" type="number" id="quantidade_existente" placeholder="" required >
+                    </div>
+    
+                    <div class="input-group">
+                    <input type="submit" value="Cadastrar">
+                  </div>
+                    
+                  
+    
+                </form>
+    
+            </div>
+    
+    
+        </div>
+   </div>
+ 
+       
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const menuToggle = document.querySelector('.menu-toggle');

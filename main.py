@@ -100,6 +100,10 @@ def sobre():
 def login():
     return render_template("login.html")
 
+@app.route("/consulta_produto")
+def consulta_produto():
+    return render_template("consulta_produto.html")
+
 @app.route("/criar_nota", methods=["POST"])
 def criar_nota():
     nome_cliente = request.form["nome_tomador_de_servicos"]
