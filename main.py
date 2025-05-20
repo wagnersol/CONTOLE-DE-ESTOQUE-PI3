@@ -39,14 +39,14 @@ def cadastrar_nota():
 @app.route("/consulta_balanco")
 def consulta_balanco():
     if not session.get('nome'):
-        return redirect(url_for('cadastro_usuarios'))
+        return redirect(url_for('cadastro_usuario'))
     return render_template("consulta_balanco.html")
 
 @app.route("/solicitar_relatorio")
 def solicitar_relatorio():
     dados = []
-    with psycopg.connect(URL_CONNEXAO) as conn:
-        with conn.cursor() as cur:
+    conexao = sqlite3.connect('banco_de_dados.db')
+    with conexao.cursor() as cur:
             cur.execute("SELECT * FROM nota_fiscal")
             dados = cur.fetchall()
     
@@ -135,11 +135,12 @@ def submit_usuario():
 def submit_produto():
     nome = request.form['nome']
     quantidade_existente = request.form['quantidade_existente']
-    with psycopg.connect(URL_CONNEXAO) as conn:
-        with conn.cursor() as cur:
-            cur.execute("UPDATE produto SET quantidade = %s WHERE nome= %s", 
-                        (quantidade_existente, nome))
-            conn.commit()
+    codigo = request.form['codigo_produto']
+    conexao = sqlite3.connect('C:\Users\wagne\OneDrive\Área de Trabalho\CONTOLE-DE-ESTOQUE-PI3\banco_de_dados.db')
+    with conexao.cursor() as cur:
+        cur.execute("INSERT INTO produto ( nome,codigo, quantidade) VALUES (%s, %s, %s)", 
+                        (nome, codigo, quantidade_existente))
+        conexao.commit()
    # return redirect(url_for('home.html'))
     return render_template("home.html")
 
