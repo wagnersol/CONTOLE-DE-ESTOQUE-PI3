@@ -1,7 +1,6 @@
 from flask import Flask
 from flask import render_template, send_from_directory, request, redirect, url_for, jsonify, session
 from flask_cors import CORS
-import sqlite3
 import json
 import psycopg
 
@@ -45,9 +44,11 @@ def consulta_balanco():
 @app.route("/solicitar_relatorio")
 def solicitar_relatorio():
     dados = []
-    conexao = sqlite3.connect('banco_de_dados.db')
-    with conexao.cursor() as cur:
-            cur.execute("SELECT * FROM nota_fiscal")
+    with psycopg.connect(URL_CONNEXAO) as conn:
+        with conn.cursor() as cur:
+            cur.execute(""" SELECT * 
+                FROM nota_fiscal 
+                """, {"ativo": ativo , "passivo": passivo, "nome_cliente": f"%{nome_cliente}%" })
             dados = cur.fetchall()
     
     dados_formatados = []
@@ -136,12 +137,13 @@ def submit_produto():
     nome = request.form['nome']
     quantidade_existente = request.form['quantidade_existente']
     codigo = request.form['codigo_produto']
-    conexao = sqlite3.connect('C:\Users\wagne\OneDrive\Área de Trabalho\CONTOLE-DE-ESTOQUE-PI3\banco_de_dados.db')
-    with conexao.cursor() as cur:
-        cur.execute("INSERT INTO produto ( nome,codigo, quantidade) VALUES (%s, %s, %s)", 
-                        (nome, codigo, quantidade_existente))
-        conexao.commit()
-   # return redirect(url_for('home.html'))
+   
+    with psycopg.connect(URL_CONNEXAO) as conn:
+        with conn.cursor() as cur:
+            cur.execute("INSERT INTO produto (nome, quantidade_existente, codigo) VALUES (%s, %s, %s)", 
+                        (nome, quantidade_existente, codigo))
+            conn.commit()
+   
     return render_template("home.html")
 
 
