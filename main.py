@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import render_template, send_from_directory, request, redirect, url_for, jsonify, session
+from flask import render_template, send_from_directory, request, redirect, url_for, jsonify, session, flash
 from flask_cors import CORS
 import json
 import psycopg
@@ -41,6 +41,10 @@ def consulta_balanco():
         return redirect(url_for('cadastro_usuario'))
     return render_template("consulta_balanco.html")
 
+@app.route("/venda_produto")
+def venda_produto():
+    return render_template("venda_produto.html")
+
 @app.route("/solicitar_relatorio")
 def solicitar_relatorio():
     dados = []
@@ -70,14 +74,16 @@ def executa_consulta_balanco():
     dados = []
     with psycopg.connect(URL_CONNEXAO) as conn:
         with conn.cursor() as cur:
-            cur.execute(""" SELECT nome_cliente, valor_entrada, valor_saida, data_emissao 
-                FROM nota_fiscal 
-                where 1 = 1 
-                AND (%(ativo)s IS TRUE OR valor_saida > 0)
-                AND (%(passivo)s IS TRUE OR valor_entrada > 0)
-                AND (LENGTH(%(nome_cliente)s) = 0 OR nome_cliente ilike %(nome_cliente)s)
-                ORDER BY nome_cliente
-                """, {"ativo": ativo , "passivo": passivo, "nome_cliente": f"%{nome_cliente}%" })
+            cur.execute(""" SELECT nome_cliente, 
+                                   valor_entrada, 
+                                   valor_saida, 
+                                   data_emissao 
+                            FROM nota_fiscal 
+                            where (%(ativo)s IS TRUE OR valor_saida > 0)
+                            AND (%(passivo)s IS TRUE OR valor_entrada > 0)
+                            AND (LENGTH(%(nome_cliente)s) = 0 OR nome_cliente ilike %(nome_cliente)s)
+                            ORDER BY nome_cliente
+                            """, {"ativo": ativo , "passivo": passivo, "nome_cliente": f"%{nome_cliente}%" })
             dados = cur.fetchall()
 
     dados_formatados = []
@@ -137,14 +143,44 @@ def submit_produto():
     nome = request.form['nome']
     quantidade_existente = request.form['quantidade_existente']
     codigo = request.form['codigo_produto']
-   
     with psycopg.connect(URL_CONNEXAO) as conn:
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO produto (nome, quantidade_existente, codigo) VALUES (%s, %s, %s)", 
-                        (nome, quantidade_existente, codigo))
+            cur.execute("INSERT INTO produto ( nome,codigo, quantidade) VALUES (%s, %s, %s)",
+                            (nome, codigo, quantidade_existente))
             conn.commit()
-   
+   # return redirect(url_for('home.html'))
     return render_template("home.html")
+
+@app.route('/retorna_produtos', methods=['POST'])
+def retorna_produtos():
+    data = request.get_json()
+    nome = data.get('nome', '')
+    codigo = data.get('codigo_produto', '')
+
+    dados = []
+    with psycopg.connect(URL_CONNEXAO) as conn:
+        with conn.cursor() as cur:
+            cur.execute("""select nome,
+                                  codigo,
+                                  quantidade
+                           from produto
+                           where nome like '%{}%'
+                           and codigo like '%{}%'""".format(nome, codigo))
+            dados = cur.fetchall()
+
+    dados_formatados = []
+    for produtos in dados:
+        dados_formatados.append(
+            {
+                'nome': produtos[0],
+                'codigo': produtos[1],
+                'quantidade': produtos[2]
+            }
+        )
+
+    return jsonify(dados_formatados)
+
+    # return render_template("home.html")
 
 
 
@@ -167,7 +203,43 @@ def submit_login():
         return redirect(url_for('cadastrar_nota'))
     else:
         return redirect(url_for('cadastro_usuario'))
-        
+
+@app.route('/vender_produto', methods=['POST'])
+def vender_produto():
+    nome = request.form['nome']
+    codigo = request.form['codigo_produto']
+    quantidade_vendida = int(request.form['quantidade_vendida'])
+
+    with psycopg.connect(URL_CONNEXAO) as conn:
+        with conn.cursor() as cur:
+            # Verifica quantidade atual
+            cur.execute("""
+                SELECT quantidade FROM produto
+                WHERE nome = %s AND codigo = %s
+            """, (nome, codigo))
+            resultado = cur.fetchone()
+
+            if not resultado:
+                flash("Produto não encontrado.")
+                return redirect(url_for('venda_produto'))
+
+            quantidade_atual = resultado[0]
+
+            if quantidade_vendida > quantidade_atual:
+                flash("Quantidade vendida excede o estoque atual.")
+                return redirect(url_for('venda_produto'))
+
+            # Atualiza a quantidade
+            nova_quantidade = quantidade_atual - quantidade_vendida
+            cur.execute("""
+                UPDATE produto SET quantidade = %s
+                WHERE nome = %s AND codigo = %s
+            """, (nova_quantidade, nome, codigo))
+            conn.commit()
+
+    flash("Venda registrada com sucesso.")
+    return redirect(url_for('venda_produto'))
+
 if __name__=="__main__":
     app.secret_key = 'chave_acesso'
     app.run(host="0.0.0.0",port=9000, debug=True)

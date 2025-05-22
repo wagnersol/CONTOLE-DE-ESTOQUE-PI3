@@ -1,8 +1,9 @@
 import sqlite3
 
 # cria banco usuario.db SQlite
-conexao = sqlite3.connect('banco_de_dados.db')
-
+# conexao = sqlite3.connect('banco_de_dados.db')
+URL_CONNEXAO = "postgres://neondb_owner:3Vzlg8qIRBoa@ep-green-bonus-a58b1qy5.us-east-2.aws.neon.tech/neondb"
+conexao = psycopg.connect(URL_CONNEXAO)
 # executar comandos SQL
 cursor = conexao.cursor()
 
@@ -37,8 +38,8 @@ comando_sql = """
 CREATE TABLE IF NOT EXISTS produto (
     id INTEGER PRIMARY KEY,
     nome TEXT,
-    codigo_produto INTEGER,
-    quantidade_existente  INTEGER
+    codigo TEXT,
+    quantidade  INTEGER
     
 )
 """

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venda de Produtos</title>
+    <link rel="stylesheet" href="/static/css/cadastro_produto.css">
+    <link rel="stylesheet" href="/static/css/componentes/cabecalho.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <header class="cabecalho">
+        <nav class="cabecalho__menu">
+            <button class="menu-toggle" aria-label="Toggle menu">☰</button>
+            <div class="menu-links">
+                <a class="cabecalho__menu__link" href="login">Login</a>
+                <a class="cabecalho__menu__link" href="cadastro_usuario">Cadastrar Usuario</a>
+                <a class="cabecalho__menu__link" href="cadastro_nota">Cadastrar Nota</a>
+                <a class="cabecalho__menu__link" href="consulta_balanco">Consultar Balanço</a>
+                <a class="cabecalho__menu__link" href="/#" onClick="solicitarRelatorio(event)">Solicitar Relatório</a>
+                <a class="cabecalho__menu__link" href="cadastro_produto">Cadastrar Produtos</a>
+                <a class="cabecalho__menu__link" href="venda_produto">Vender Produtos</a>
+                <a class="cabecalho__menu__link" href="consulta_produto">Consultar Produtos</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="conteudo-produto">
+        <div class="box">
+            <div class="img-box">
+                <img src="/static/img/gestao-do-inventario-para-multiplos-canais-de-vendas_1104763-20596.avif" alt="Imagem de vendas">
+            </div>
+            <div class="form-box">
+                <form action="/vender_produto" method="post">
+                    <div class="input-group">
+                        <label for="nome">Nome/Produto:</label>
+                        <input type="text" id="nome" name="nome" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="codigo">Código/Produto:</label>
+                        <input type="text" id="codigo" name="codigo_produto" required>
+                    </div>
+
+                    <div class="input-group w50">
+                        <label for="quantidade_vendida">Quantidade a Vender:</label>
+                        <input name="quantidade_vendida" type="number" id="quantidade_vendida" min="1" required>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="submit" value="Registrar Venda">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Mensagem Flash -->
+    <div class="modal fade" id="mensagemModal" tabindex="-1" aria-labelledby="mensagemModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header bg-info">
+            <h5 class="modal-title" id="mensagemModalLabel">Mensagem</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+          </div>
+          <div class="modal-body">
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                {% for message in messages %}
+                  <div class="alert alert-info mb-0" role="alert">
+                    {{ message }}
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const menuToggle = document.querySelector('.menu-toggle');
+            const menuLinks = document.querySelector('.menu-links');
+            menuToggle.addEventListener('click', function () {
+                menuLinks.classList.toggle('active');
+            });
+
+            // Verifica se há mensagens e abre o modal automaticamente
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                const mensagemModal = new bootstrap.Modal(document.getElementById('mensagemModal'));
+                mensagemModal.show();
+            {% endif %}
+            {% endwith %}
+        });
+    </script>
+</body>
+</html>

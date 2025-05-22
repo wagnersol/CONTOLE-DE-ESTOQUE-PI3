@@ -11,18 +11,16 @@
 <body>
     <header class="cabecalho">
         <nav class="cabecalho__menu">
-            <button class="menu-toggle" aria-label="Toggle menu">
-                ☰
-            </button>
+            <button class="menu-toggle" aria-label="Toggle menu">☰</button>
             <div class="menu-links">
                 <a class="cabecalho__menu__link" href="login">Login</a>
                 <a class="cabecalho__menu__link" href="cadastro_usuario">Cadastrar Usuario</a>
                 <a class="cabecalho__menu__link" href="cadastro_nota">Cadastrar Nota</a>
                 <a class="cabecalho__menu__link" href="consulta_balanco">Consultar Balanço</a>
-                <a class="cabecalho__menu__link" href="/#" onClick="solicitarRelatorio(event)">Solicitar Relatório </a>
+                <a class="cabecalho__menu__link" href="/#" onClick="solicitarRelatorio(event)">Solicitar Relatório</a>
                 <a class="cabecalho__menu__link" href="cadastro_produto">Cadastrar Produtos</a>
+                <a class="cabecalho__menu__link" href="venda_produto">Vender Produtos</a>
                 <a class="cabecalho__menu__link" href="consulta_produto">Consultar Produtos</a>
-
             </div>
         </nav>
     </header>
@@ -30,48 +28,96 @@
     <div class="conteudo-consulta">
         <div class="box">
             <div class="img-box">
-                 <img src="/static/img/variedade-de-pessoas-multitasking-em-uma-cena-de-desenho-animado-3d_23-2151294523.avif" alt="100">
-     
-             </div>
-             
-             <div class="form-box">
-                <form action="/submit_produto" method="post">
+                <img src="/static/img/variedade-de-pessoas-multitasking-em-uma-cena-de-desenho-animado-3d_23-2151294523.avif" alt="Imagem decorativa">
+            </div>
+            <div class="form-box">
+                <form id="form-consulta">
                     <div class="input-group">
                         <label for="nome">Nome/Produto:</label>
-                        <input type="text" id="nome" name="nome" placeholder="" required>
+                        <input type="text" id="nome" name="nome" required>
                     </div>
-
                     <div class="input-group">
-                         <label for="codigo">Codigo/Produto:</label>
-                         <input type="codigo_produto" id="codigo" name="codigo_produto"placeholder="" required>
-                     </div>
-
-    
+                        <label for="codigo">Codigo/Produto:</label>
+                        <input type="text" id="codigo" name="codigo_produto" required>
+                    </div>
                     <div class="input-group">
-                    <input type="submit" value="Consultar">
-                  </div>
-                    
-                  
-    
+                        <button type="submit" class="btn btn-primary">Consultar</button>
+                    </div>
                 </form>
-    
+
+                <!-- Resultado da Consulta (abaixo do botão) -->
+                <div class="container mt-4" id="resultado-consulta" style="display: none;">
+                    <h5>Resultados Encontrados:</h5>
+                    <table class="table table-bordered table-sm">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Código</th>
+                                <th>Quantidade</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabela-corpo">
+                            <!-- Conteúdo injetado via JS -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
-    
-    
         </div>
-   </div>
- 
-       
+    </div>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const menuToggle = document.querySelector('.menu-toggle');
             const menuLinks = document.querySelector('.menu-links');
-
-            menuToggle.addEventListener('click', function() {
+            menuToggle.addEventListener('click', function () {
                 menuLinks.classList.toggle('active');
+            });
+
+            const form = document.getElementById('form-consulta');
+            const tabelaCorpo = document.getElementById('tabela-corpo');
+            const resultadoDiv = document.getElementById('resultado-consulta');
+
+            form.addEventListener('submit', async function (event) {
+                event.preventDefault(); // Evita recarregar a página
+
+                const nome = document.getElementById('nome').value;
+                const codigo = document.getElementById('codigo').value;
+
+                const response = await fetch('/retorna_produtos', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ nome: nome, codigo_produto: codigo })
+                });
+
+                if (!response.ok) {
+                    alert('Erro ao consultar produtos.');
+                    return;
+                }
+
+                const produtos = await response.json();
+
+                // Limpa a tabela
+                tabelaCorpo.innerHTML = '';
+
+                if (produtos.length > 0) {
+                    produtos.forEach(produto => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${produto.nome}</td>
+                            <td>${produto.codigo}</td>
+                            <td>${produto.quantidade}</td>
+                        `;
+                        tabelaCorpo.appendChild(row);
+                    });
+                    resultadoDiv.style.display = 'block';
+                } else {
+                    resultadoDiv.style.display = 'block';
+                    tabelaCorpo.innerHTML = '<tr><td colspan="3">Nenhum produto encontrado.</td></tr>';
+                }
             });
         });
     </script>
-
 </body>
 </html>
