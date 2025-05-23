@@ -41,9 +41,9 @@ def consulta_balanco():
         return redirect(url_for('cadastro_usuario'))
     return render_template("consulta_balanco.html")
 
-@app.route("/venda_produto")
+@app.route("/saida_produto")
 def venda_produto():
-    return render_template("venda_produto.html")
+    return render_template("saida_produto.html")
 
 @app.route("/solicitar_relatorio")
 def solicitar_relatorio():
@@ -204,7 +204,7 @@ def submit_login():
     else:
         return redirect(url_for('cadastro_usuario'))
 
-@app.route('/vender_produto', methods=['POST'])
+@app.route('/saida_produto', methods=['POST'])
 def vender_produto():
     nome = request.form['nome']
     codigo = request.form['codigo_produto']
@@ -237,8 +237,8 @@ def vender_produto():
             """, (nova_quantidade, nome, codigo))
             conn.commit()
 
-    flash("Venda registrada com sucesso.")
-    return redirect(url_for('venda_produto'))
+    flash("Saida registrada com sucesso.")
+    return redirect(url_for('saida_produto'))
 
 if __name__=="__main__":
     app.secret_key = 'chave_acesso'

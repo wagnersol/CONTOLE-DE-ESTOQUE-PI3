@@ -19,7 +19,7 @@
                 <a class="cabecalho__menu__link" href="consulta_balanco">Consultar Balanço</a>
                 <a class="cabecalho__menu__link" href="/#" onClick="solicitarRelatorio(event)">Solicitar Relatório</a>
                 <a class="cabecalho__menu__link" href="cadastro_produto">Cadastrar Produtos</a>
-                <a class="cabecalho__menu__link" href="venda_produto">Vender Produtos</a>
+                <a class="cabecalho__menu__link" href="Saida_produto">Saída Produtos</a>
                 <a class="cabecalho__menu__link" href="consulta_produto">Consultar Produtos</a>
             </div>
         </nav>
@@ -28,10 +28,10 @@
     <div class="conteudo-produto">
         <div class="box">
             <div class="img-box">
-                <img src="/static/img/gestao-do-inventario-para-multiplos-canais-de-vendas_1104763-20596.avif" alt="Imagem de vendas">
+                <img src="/static/img/conceito-retro-de-armazem_1284-8082.avif" alt="Imagem de vendas">
             </div>
             <div class="form-box">
-                <form action="/vender_produto" method="post">
+                <form action="/Saída_produto" method="post">
                     <div class="input-group">
                         <label for="nome">Nome/Produto:</label>
                         <input type="text" id="nome" name="nome" required>
@@ -41,14 +41,14 @@
                         <label for="codigo">Código/Produto:</label>
                         <input type="text" id="codigo" name="codigo_produto" required>
                     </div>
-
+o
                     <div class="input-group w50">
-                        <label for="quantidade_vendida">Quantidade a Vender:</label>
+                        <label for="quantidade_vendida">Quantidade/Saída:</label>
                         <input name="quantidade_vendida" type="number" id="quantidade_vendida" min="1" required>
                     </div>
 
                     <div class="input-group">
-                        <input type="submit" value="Registrar Venda">
+                        <input type="submit" value="Registro de Saída">
                     </div>
                 </form>
             </div>

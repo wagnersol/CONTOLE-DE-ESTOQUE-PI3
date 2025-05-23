@@ -31,7 +31,7 @@ body {
 
 .box{   /* mexe com a aparte do formulario ex:já é membro*/
 display: flex;
-width: 900px;
+width: 700px;
 
 }
 
@@ -45,7 +45,7 @@ width: 900px;
 }
 
 .img-box img{
- width: 80%;
+ width: 100%;
 
 }
 
