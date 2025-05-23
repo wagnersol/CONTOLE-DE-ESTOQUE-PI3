@@ -39,8 +39,8 @@ CREATE TABLE IF NOT EXISTS produto (
     id INTEGER PRIMARY KEY,
     nome TEXT,
     codigo TEXT,
-    quantidade  INTEGER
-    
+    quantidade  INTEGER,
+    data_hora_saida  TIMESTAMP
 )
 """
 # Executar o comando SQL

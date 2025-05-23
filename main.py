@@ -42,7 +42,7 @@ def consulta_balanco():
     return render_template("consulta_balanco.html")
 
 @app.route("/saida_produto")
-def venda_produto():
+def saida_produto():
     return render_template("saida_produto.html")
 
 @app.route("/solicitar_relatorio")
@@ -162,19 +162,26 @@ def retorna_produtos():
         with conn.cursor() as cur:
             cur.execute("""select nome,
                                   codigo,
-                                  quantidade
+                                  quantidade,
+                                  data_hora_saida
                            from produto
                            where nome like '%{}%'
                            and codigo like '%{}%'""".format(nome, codigo))
             dados = cur.fetchall()
 
     dados_formatados = []
+
     for produtos in dados:
+        data_hora = None
+        if produtos[3]:
+            data_hora = produtos[3].isoformat()
+
         dados_formatados.append(
             {
                 'nome': produtos[0],
                 'codigo': produtos[1],
-                'quantidade': produtos[2]
+                'quantidade': produtos[2],
+                'data_hora_saida': produtos[3]
             }
         )
 
@@ -221,18 +228,18 @@ def vender_produto():
 
             if not resultado:
                 flash("Produto não encontrado.")
-                return redirect(url_for('venda_produto'))
+                return redirect(url_for('saida_produto'))
 
             quantidade_atual = resultado[0]
 
             if quantidade_vendida > quantidade_atual:
                 flash("Quantidade vendida excede o estoque atual.")
-                return redirect(url_for('venda_produto'))
+                return redirect(url_for('saida_produto'))
 
             # Atualiza a quantidade
             nova_quantidade = quantidade_atual - quantidade_vendida
             cur.execute("""
-                UPDATE produto SET quantidade = %s
+                UPDATE produto SET quantidade = %s, data_hora_saida = now()
                 WHERE nome = %s AND codigo = %s
             """, (nova_quantidade, nome, codigo))
             conn.commit()
